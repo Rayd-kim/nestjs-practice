@@ -4,8 +4,10 @@ import { Board } from './board.entitiy';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('boards')
+@ApiTags('board')
 export class BoardsController {
   constructor(private boardService: BoardsService) {}
 
