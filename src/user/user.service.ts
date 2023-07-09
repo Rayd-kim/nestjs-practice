@@ -4,12 +4,14 @@ import { Repository } from 'typeorm';
 import { User } from './user.entitiy';
 import { userDto } from './dto/user.dto';
 import { userAuthDto } from './dto/userAuth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private jwtService: JwtService
   ){}
 
   async findAll() : Promise<User[]> {
@@ -25,14 +27,6 @@ export class UserService {
   }
 
   async create(userDto: userDto) : Promise<void> {
-    // const found = await this.userRepository.findOne({where : {user_id: userDto.user_id}});
-    // if (!found) {
-    //   const {user_id, user_pw, user_nickname, memo} = userDto;
-    //   const user = this.userRepository.create({user_id: user_id, user_pw: user_pw, user_nickname, memo});
-    //   await this.userRepository.save(user);
-    // } else {
-    //   console.log('already our member');
-    // }
     const {user_id, user_pw, user_nickname, memo} = userDto;
     const user = this.userRepository.create({user_id: user_id, user_pw: user_pw, user_nickname, memo});
     try {
@@ -57,10 +51,15 @@ export class UserService {
     return user;
   }
 
-  async signIn(userAuthDto : userAuthDto) : Promise<string> {
+  async signIn(userAuthDto : userAuthDto) : Promise<{accessToken: string}> {
     const user: Promise<User> = this.findOne(userAuthDto.user_id);
     if ((await user.then((found => found.user_pw === userAuthDto.user_pw)))) {
-      return 'login success';
+      // user token create. (secret + Payload)
+      const payload = { user_id : userAuthDto.user_id };
+      const accessToken = await this.jwtService.sign(payload);
+
+      return { accessToken };
+      // return 'login success';
     }
     throw new UnauthorizedException('login failed');
   }

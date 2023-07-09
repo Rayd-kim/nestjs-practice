@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, ValidationPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entitiy';
 import { rejects } from 'assert';
@@ -43,8 +43,13 @@ export class UserController {
   }
 
   @Post('/signin')
-  signIn(@Body() userAuthDto : userAuthDto) : Promise<string> {
+  signIn(@Body() userAuthDto : userAuthDto) : Promise<{accessToken: string}> {
     return this.userService.signIn(userAuthDto);
   } 
+
+  @Post('/test')
+  test(@Req() req) {
+    console.log('req : ',req);
+  }
 
 }
