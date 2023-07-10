@@ -15,14 +15,12 @@ export const typeORMConfig : TypeOrmModuleOptions = {
 }
 
 export const userTypeORMconf : TypeOrmModuleOptions = {
-  // name : 'users',
   type: 'postgres',
-  host: '172.17.0.2',
+  host: '172.17.0.3',
   port: 5432,
   username: 'postgres',
   password: 'postgres',
   database: 'test',
-  // entities: [__dirname + '/../**/*.entitiy.{js,ts}'],
   entities: [User, Board],
   synchronize: true
 }
