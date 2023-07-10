@@ -27,9 +27,12 @@ export class UserService {
   }
 
   async getAccessToken(code: string) : Promise<void> {
+    const api_url = 'https://api.intra.42.fr/oauth/token';
+    const grant_type = 'authorization_code';
     const client_uid = 'u-s4t2ud-3d94fb385e79fd3ae1927dc2023fb428b19b190eeb581049231ea9dd301e17fa';
-    const clinet_secret = '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';
-    const tokenUrl = `https://api.intra.42.fr/oauth/token?grant_type=authorization_code&client_id=${client_uid}&client_secret=${clinet_secret}&code=${code}&redirect_uri=http://localhost:3000/user/42api/oauth_ok`;
+    const client_secret = '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';
+    const redirect_uri = 'http://localhost:3000/user/42api/oauth_ok';
+    const tokenUrl = api_url + '?grant_type=' + grant_type + '&client_id=' + client_uid + '&client_secret=' + client_secret + '&code=' + code + '&redirect_uri=' + redirect_uri;
     console.log("code :" , code);
     // let res;
     console.log(tokenUrl);
